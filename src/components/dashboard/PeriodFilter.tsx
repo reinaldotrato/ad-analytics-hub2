@@ -6,10 +6,16 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { CalendarIcon } from "lucide-react";
-import { format } from "date-fns";
+import { format, subDays } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { cn } from "@/lib/utils";
 import { DateRange } from "react-day-picker";
+
+const PERIOD_PRESETS = [
+  { label: '7D', days: 7 },
+  { label: '30D', days: 30 },
+  { label: '90D', days: 90 },
+];
 
 interface PeriodFilterProps {
   dateRange?: DateRange;
@@ -44,8 +50,25 @@ export function PeriodFilter({
     }
   };
 
+  const handlePeriodPreset = (days: number) => {
+    const from = subDays(new Date(), days);
+    const to = new Date();
+    handleSelect({ from, to });
+  };
+
   return (
     <div className="flex items-center gap-2">
+      {PERIOD_PRESETS.map((preset) => (
+        <Button
+          key={preset.days}
+          variant="outline"
+          size="sm"
+          onClick={() => handlePeriodPreset(preset.days)}
+          className="px-3"
+        >
+          {preset.label}
+        </Button>
+      ))}
       <Popover>
         <PopoverTrigger asChild>
           <Button
