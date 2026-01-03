@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
+import { useQueryClient } from '@tanstack/react-query';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import {
@@ -24,11 +25,13 @@ import { GlobalSearchCommand } from '@/components/GlobalSearchCommand';
 interface Client {
   id: string;
   name: string;
+  company_name?: string;
 }
 
 export function Topbar() {
   const { user, role, signOut, selectedClientId, setSelectedClientId } = useAuth();
   const { theme, setTheme } = useTheme();
+  const queryClient = useQueryClient();
   const [clients, setClients] = useState<Client[]>([]);
   const [currentClientName, setCurrentClientName] = useState<string>('');
 
@@ -38,7 +41,7 @@ export function Topbar() {
       if (role === 'admin') {
         const { data } = await supabase
           .from('tryvia_analytics_clients')
-          .select('id, name')
+          .select('id, name, company_name')
           .order('name');
         
         if (data) {
@@ -56,12 +59,12 @@ export function Topbar() {
       if (selectedClientId) {
         const { data } = await supabase
           .from('tryvia_analytics_clients')
-          .select('name')
+          .select('name, company_name')
           .eq('id', selectedClientId)
           .single();
         
         if (data) {
-          setCurrentClientName(data.name);
+          setCurrentClientName(data.company_name || data.name);
         }
       }
     };
@@ -73,6 +76,8 @@ export function Topbar() {
 
   const handleClientChange = (clientId: string) => {
     setSelectedClientId(clientId);
+    // Invalidate all queries to force refetch with new client
+    queryClient.invalidateQueries();
   };
 
   const toggleTheme = () => {
@@ -92,7 +97,7 @@ export function Topbar() {
             <SelectContent>
               {clients.map((client) => (
                 <SelectItem key={client.id} value={client.id}>
-                  {client.name}
+                  {client.company_name || client.name}
                 </SelectItem>
               ))}
             </SelectContent>
@@ -113,13 +118,11 @@ export function Topbar() {
           variant="ghost"
           size="icon"
           onClick={toggleTheme}
-          className="h-9 w-9"
+          className="h-9 w-9 relative"
         >
-          {theme === 'dark' ? (
-            <Sun className="h-4 w-4" />
-          ) : (
-            <Moon className="h-4 w-4" />
-          )}
+          <Sun className="h-4 w-4 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
+          <Moon className="absolute h-4 w-4 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+          <span className="sr-only">Alternar tema</span>
         </Button>
 
         <DropdownMenu>

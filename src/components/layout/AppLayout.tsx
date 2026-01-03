@@ -5,25 +5,23 @@ import { Topbar } from './Topbar';
 import { SupportChatWidget } from '@/components/support/SupportChatWidget';
 import { cn } from '@/lib/utils';
 
-export interface AppLayoutProps {
-  children?: React.ReactNode;
-}
+// Routes that need custom scroll behavior (e.g., Kanban with horizontal scroll)
+const CUSTOM_SCROLL_ROUTES = ['/crm/pipeline'];
 
-export function AppLayout({ children }: AppLayoutProps) {
+export function AppLayout() {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const location = useLocation();
 
-  // Determine if we need custom scroll behavior (e.g., for Kanban)
-  const isKanbanRoute = location.pathname === '/crm/pipeline';
+  const toggleSidebar = () => setSidebarCollapsed(!sidebarCollapsed);
+
+  // Determine if we need custom scroll behavior
+  const needsCustomScroll = CUSTOM_SCROLL_ROUTES.includes(location.pathname);
   const isCrmRoute = location.pathname.startsWith('/crm');
 
   return (
-    <div className="flex h-screen w-full bg-background">
+    <div className="flex h-screen w-full overflow-hidden bg-background">
       {/* Sidebar */}
-      <Sidebar 
-        collapsed={sidebarCollapsed} 
-        onToggle={() => setSidebarCollapsed(!sidebarCollapsed)} 
-      />
+      <Sidebar collapsed={sidebarCollapsed} onToggle={toggleSidebar} />
 
       {/* Main Content */}
       <div className="flex flex-col flex-1 min-w-0">
@@ -32,17 +30,13 @@ export function AppLayout({ children }: AppLayoutProps) {
         <main 
           className={cn(
             "flex-1",
-            isKanbanRoute 
-              ? "overflow-hidden" 
-              : "overflow-auto"
+            needsCustomScroll ? "overflow-hidden" : "overflow-auto"
           )}
         >
           <div className={cn(
-            isKanbanRoute 
-              ? "h-full" 
-              : "p-6"
+            needsCustomScroll ? "h-full" : "p-6"
           )}>
-            {children || <Outlet />}
+            <Outlet />
           </div>
         </main>
       </div>
