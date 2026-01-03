@@ -8,8 +8,8 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/component
 import { 
   LayoutDashboard, 
   Settings, 
-  Menu, 
-  X,
+  ChevronLeft,
+  ChevronRight,
   PieChart,
   Globe,
   HeadphonesIcon,
@@ -21,7 +21,6 @@ import {
   Contact,
   Kanban,
   ChevronDown,
-  ChevronRight,
   TrendingUp,
   Users
 } from 'lucide-react';
@@ -115,15 +114,15 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
                 variant="ghost"
                 size="icon"
                 className={cn(
-                  "w-10 h-10 mx-auto",
+                  "w-10 h-10 mx-auto transition-all duration-200",
                   active && "bg-primary/10 text-primary"
                 )}
               >
-                <Icon className="h-5 w-5" />
+                <Icon className="h-5 w-5 transition-transform duration-200" />
               </Button>
             </Link>
           </TooltipTrigger>
-          <TooltipContent side="right">
+          <TooltipContent side="right" className="animate-scale-in">
             {label}
           </TooltipContent>
         </Tooltip>
@@ -135,28 +134,49 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
         <Button
           variant="ghost"
           className={cn(
-            "w-full justify-start gap-3 h-10",
+            "w-full justify-start gap-3 h-10 transition-all duration-200",
             active && "bg-primary/10 text-primary"
           )}
         >
-          <Icon className="h-5 w-5" />
-          <span>{label}</span>
+          <Icon className="h-5 w-5 shrink-0 transition-transform duration-200" />
+          <span className={cn(
+            "transition-all duration-300 ease-out whitespace-nowrap",
+            collapsed ? "opacity-0 w-0" : "opacity-100"
+          )}>
+            {label}
+          </span>
         </Button>
       </Link>
     );
   };
 
+  // Section label component with animation
+  const SectionLabel = ({ children }: { children: React.ReactNode }) => (
+    <div className={cn(
+      "overflow-hidden transition-all duration-300 ease-out",
+      collapsed ? "h-0 opacity-0 mb-0" : "h-auto opacity-100 mb-2"
+    )}>
+      <p className="px-3 text-xs font-medium text-muted-foreground uppercase tracking-wider">
+        {children}
+      </p>
+    </div>
+  );
+
   return (
     <TooltipProvider delayDuration={0}>
       <aside
         className={cn(
-          "flex flex-col h-screen border-r border-border bg-sidebar transition-all duration-300",
+          "flex flex-col h-screen border-r border-border bg-sidebar",
+          "transition-[width] duration-300 ease-out",
           collapsed ? "w-16" : "w-64"
         )}
       >
         {/* Header */}
         <div className="flex items-center justify-between h-16 px-4 border-b border-border">
-          {!collapsed && (
+          <div className={cn(
+            "overflow-hidden transition-all duration-300 ease-out",
+            collapsed ? "w-0 opacity-0" : "w-auto opacity-100"
+          )}>
             <Link to="/dashboard" className="flex items-center gap-2">
               <img 
                 src="/images/logo-positiva.png" 
@@ -169,14 +189,20 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
                 className="h-8 hidden dark:block"
               />
             </Link>
-          )}
+          </div>
           <Button
             variant="ghost"
             size="icon"
             onClick={onToggle}
-            className={cn("h-8 w-8", collapsed && "mx-auto")}
+            className={cn(
+              "h-8 w-8 transition-all duration-300 ease-out hover:bg-primary/10",
+              collapsed && "mx-auto"
+            )}
           >
-            {collapsed ? <Menu className="h-4 w-4" /> : <X className="h-4 w-4" />}
+            <ChevronLeft className={cn(
+              "h-4 w-4 transition-transform duration-300 ease-out",
+              collapsed && "rotate-180"
+            )} />
           </Button>
         </div>
 
@@ -186,11 +212,7 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
             {/* Main Navigation */}
             {mainNavItems.length > 0 && (
               <div className="space-y-1">
-                {!collapsed && (
-                  <p className="px-3 text-xs font-medium text-muted-foreground uppercase tracking-wider mb-2">
-                    Dashboards
-                  </p>
-                )}
+                <SectionLabel>Dashboards</SectionLabel>
                 {mainNavItems.map((item) => (
                   <NavItem key={item.path} {...item} />
                 ))}
@@ -200,11 +222,7 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
             {/* CRM Section */}
             {hasCrmAccess && (
               <div className="space-y-1">
-                {!collapsed && (
-                  <p className="px-3 text-xs font-medium text-muted-foreground uppercase tracking-wider mb-2">
-                    CRM
-                  </p>
-                )}
+                <SectionLabel>CRM</SectionLabel>
                 {collapsed ? (
                   // Collapsed: show only icons
                   crmNavItems.map((item) => (
@@ -217,24 +235,29 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
                       <Button
                         variant="ghost"
                         className={cn(
-                          "w-full justify-between h-10",
+                          "w-full justify-between h-10 transition-all duration-200",
                           isActiveGroup('/crm') && "bg-primary/10 text-primary"
                         )}
                       >
                         <span className="flex items-center gap-3">
-                          <Users className="h-5 w-5" />
-                          <span>CRM</span>
+                          <Users className="h-5 w-5 shrink-0" />
+                          <span className="transition-opacity duration-300">CRM</span>
                         </span>
-                        {crmExpanded ? (
-                          <ChevronDown className="h-4 w-4" />
-                        ) : (
-                          <ChevronRight className="h-4 w-4" />
-                        )}
+                        <ChevronDown className={cn(
+                          "h-4 w-4 transition-transform duration-300 ease-out",
+                          !crmExpanded && "-rotate-90"
+                        )} />
                       </Button>
                     </CollapsibleTrigger>
-                    <CollapsibleContent className="pl-4 space-y-1 mt-1">
-                      {crmNavItems.map((item) => (
-                        <NavItem key={item.path} icon={item.icon} label={item.label} path={item.path} />
+                    <CollapsibleContent className="pl-4 space-y-1 mt-1 overflow-hidden data-[state=open]:animate-accordion-down data-[state=closed]:animate-accordion-up">
+                      {crmNavItems.map((item, index) => (
+                        <div 
+                          key={item.path}
+                          className="animate-fade-in"
+                          style={{ animationDelay: `${index * 30}ms` }}
+                        >
+                          <NavItem icon={item.icon} label={item.label} path={item.path} />
+                        </div>
                       ))}
                     </CollapsibleContent>
                   </Collapsible>
@@ -245,11 +268,7 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
             {/* Bottom Navigation */}
             {bottomNavItems.length > 0 && (
               <div className="space-y-1">
-                {!collapsed && (
-                  <p className="px-3 text-xs font-medium text-muted-foreground uppercase tracking-wider mb-2">
-                    Sistema
-                  </p>
-                )}
+                <SectionLabel>Sistema</SectionLabel>
                 {bottomNavItems.map((item) => (
                   <NavItem key={item.path} {...item} />
                 ))}
