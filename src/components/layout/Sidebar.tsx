@@ -136,11 +136,11 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
           variant="ghost"
           className={cn(
             "w-full justify-start gap-3 h-10",
-            active && "bg-primary/10 text-primary font-medium"
+            active && "bg-primary/10 text-primary"
           )}
         >
           <Icon className="h-5 w-5" />
-          {label}
+          <span>{label}</span>
         </Button>
       </Link>
     );
@@ -150,14 +150,14 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
     <TooltipProvider delayDuration={0}>
       <aside
         className={cn(
-          "flex flex-col h-screen bg-card border-r border-border transition-all duration-300",
+          "flex flex-col h-screen border-r border-border bg-sidebar transition-all duration-300",
           collapsed ? "w-16" : "w-64"
         )}
       >
         {/* Header */}
         <div className="flex items-center justify-between h-16 px-4 border-b border-border">
           {!collapsed && (
-            <Link to="/" className="flex items-center gap-2">
+            <Link to="/dashboard" className="flex items-center gap-2">
               <img 
                 src="/images/logo-positiva.png" 
                 alt="Tryvia" 
@@ -174,46 +174,44 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
             variant="ghost"
             size="icon"
             onClick={onToggle}
-            className={cn(collapsed && "mx-auto")}
+            className={cn("h-8 w-8", collapsed && "mx-auto")}
           >
-            {collapsed ? <Menu className="h-5 w-5" /> : <X className="h-5 w-5" />}
+            {collapsed ? <Menu className="h-4 w-4" /> : <X className="h-4 w-4" />}
           </Button>
         </div>
 
         {/* Navigation */}
-        <ScrollArea className="flex-1 px-2 py-4">
-          <nav className="space-y-1">
+        <ScrollArea className="flex-1 py-4">
+          <div className="px-3 space-y-6">
             {/* Main Navigation */}
-            {mainNavItems.map((item) => (
-              <NavItem key={item.path} {...item} />
-            ))}
+            {mainNavItems.length > 0 && (
+              <div className="space-y-1">
+                {!collapsed && (
+                  <p className="px-3 text-xs font-medium text-muted-foreground uppercase tracking-wider mb-2">
+                    Dashboards
+                  </p>
+                )}
+                {mainNavItems.map((item) => (
+                  <NavItem key={item.path} {...item} />
+                ))}
+              </div>
+            )}
 
             {/* CRM Section */}
             {hasCrmAccess && (
-              <>
-                <div className="my-3 border-t border-border" />
-                
+              <div className="space-y-1">
+                {!collapsed && (
+                  <p className="px-3 text-xs font-medium text-muted-foreground uppercase tracking-wider mb-2">
+                    CRM
+                  </p>
+                )}
                 {collapsed ? (
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <Link to="/crm/pipeline">
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          className={cn(
-                            "w-10 h-10 mx-auto",
-                            isActiveGroup('/crm') && "bg-primary/10 text-primary"
-                          )}
-                        >
-                          <Users className="h-5 w-5" />
-                        </Button>
-                      </Link>
-                    </TooltipTrigger>
-                    <TooltipContent side="right">
-                      CRM
-                    </TooltipContent>
-                  </Tooltip>
+                  // Collapsed: show only icons
+                  crmNavItems.map((item) => (
+                    <NavItem key={item.path} icon={item.icon} label={item.label} path={item.path} />
+                  ))
                 ) : (
+                  // Expanded: show collapsible menu
                   <Collapsible open={crmExpanded} onOpenChange={setCrmExpanded}>
                     <CollapsibleTrigger asChild>
                       <Button
@@ -225,7 +223,7 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
                       >
                         <span className="flex items-center gap-3">
                           <Users className="h-5 w-5" />
-                          CRM
+                          <span>CRM</span>
                         </span>
                         {crmExpanded ? (
                           <ChevronDown className="h-4 w-4" />
@@ -241,17 +239,24 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
                     </CollapsibleContent>
                   </Collapsible>
                 )}
-              </>
+              </div>
             )}
-          </nav>
-        </ScrollArea>
 
-        {/* Bottom Navigation */}
-        <div className="border-t border-border px-2 py-4 space-y-1">
-          {bottomNavItems.map((item) => (
-            <NavItem key={item.path} {...item} />
-          ))}
-        </div>
+            {/* Bottom Navigation */}
+            {bottomNavItems.length > 0 && (
+              <div className="space-y-1">
+                {!collapsed && (
+                  <p className="px-3 text-xs font-medium text-muted-foreground uppercase tracking-wider mb-2">
+                    Sistema
+                  </p>
+                )}
+                {bottomNavItems.map((item) => (
+                  <NavItem key={item.path} {...item} />
+                ))}
+              </div>
+            )}
+          </div>
+        </ScrollArea>
       </aside>
     </TooltipProvider>
   );

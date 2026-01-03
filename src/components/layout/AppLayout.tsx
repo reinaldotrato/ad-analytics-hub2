@@ -41,8 +41,8 @@ export function AppLayout() {
         </main>
       </div>
 
-      {/* Support Widget - only show on CRM routes */}
-      {isCrmRoute && <SupportChatWidget />}
+      {/* Support Widget - hide on CRM routes */}
+      {!isCrmRoute && <SupportChatWidget />}
     </div>
   );
 }
