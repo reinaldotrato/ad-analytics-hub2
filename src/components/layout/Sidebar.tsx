@@ -115,6 +115,7 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
                 size="icon"
                 className={cn(
                   "w-10 h-10 mx-auto transition-all duration-200",
+                  "hover:scale-105 hover:bg-primary/5 active:scale-95",
                   active && "bg-primary/10 text-primary"
                 )}
               >
@@ -135,10 +136,14 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
           variant="ghost"
           className={cn(
             "w-full justify-start gap-3 h-10 transition-all duration-200",
+            "hover:scale-[1.02] hover:translate-x-1 hover:bg-primary/5 active:scale-[0.98]",
             active && "bg-primary/10 text-primary"
           )}
         >
-          <Icon className="h-5 w-5 shrink-0 transition-transform duration-200" />
+          <Icon className={cn(
+            "h-5 w-5 shrink-0 transition-transform duration-200",
+            "group-hover:scale-110"
+          )} />
           <span className={cn(
             "transition-all duration-300 ease-out whitespace-nowrap",
             collapsed ? "opacity-0 w-0" : "opacity-100"
