@@ -74,7 +74,7 @@ const App = () => (
                   }
                 >
                   <Route index element={<RoleBasedRedirect />} />
-                  <Route path="admin/global-dashboard" element={
+                  <Route path="admin-global" element={
                     <AdminRoute>
                       <Suspense fallback={<PageLoader />}>
                         <AdminGlobalDashboard />
@@ -107,7 +107,7 @@ const App = () => (
                       </Suspense>
                     </AdminRoute>
                   } />
-                  <Route path="support-tickets" element={
+                  <Route path="support" element={
                     <AdminRoute>
                       <Suspense fallback={<PageLoader />}>
                         <SupportTickets />
@@ -186,7 +186,7 @@ const App = () => (
                     </CrmRoute>
                   } />
                   {/* Team Productivity - requires crm_admin or higher */}
-                  <Route path="crm/team-productivity" element={
+                  <Route path="crm/productivity" element={
                     <CrmRoute requireSettings>
                       <Suspense fallback={<PageLoader />}>
                         <CrmTeamProductivity />

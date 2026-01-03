@@ -81,15 +81,15 @@ export default {
 				}
 			},
 			'reopen-pulse': {
-				'0%': { 
+				'0%': {
 					boxShadow: '0 0 0 0 hsl(142 76% 36% / 0.5)',
 					borderColor: 'hsl(142 76% 36% / 0.6)'
 				},
-				'50%': { 
+				'50%': {
 					boxShadow: '0 0 20px 4px hsl(142 76% 36% / 0.3)',
 					borderColor: 'hsl(142 76% 36% / 0.9)'
 				},
-				'100%': { 
+				'100%': {
 					boxShadow: '0 0 0 0 hsl(142 76% 36% / 0)',
 					borderColor: 'transparent'
 				}

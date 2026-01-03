@@ -129,23 +129,23 @@ export function Topbar() {
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" className="relative h-9 w-9 rounded-full">
               <Avatar className="h-9 w-9">
-                <AvatarFallback className="bg-primary text-primary-foreground text-sm">
+                <AvatarFallback className="bg-primary/10 text-primary">
                   {userInitials}
                 </AvatarFallback>
               </Avatar>
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="w-56">
-            <div className="flex items-center justify-start gap-2 p-2">
-              <div className="flex flex-col space-y-0.5 leading-none">
-                <p className="text-sm font-medium">{user?.email}</p>
-                <p className="text-xs text-muted-foreground capitalize">{role}</p>
-              </div>
+          <DropdownMenuContent className="w-56" align="end" forceMount>
+            <div className="flex flex-col space-y-1 p-2">
+              <p className="text-sm font-medium leading-none">{user?.email}</p>
+              <p className="text-xs leading-none text-muted-foreground capitalize">
+                {role || 'Usuário'}
+              </p>
             </div>
             <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={signOut} className="text-destructive focus:text-destructive">
+            <DropdownMenuItem onClick={signOut} className="text-destructive cursor-pointer">
               <LogOut className="mr-2 h-4 w-4" />
-              Sair
+              <span>Sair</span>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
