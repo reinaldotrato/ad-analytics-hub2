@@ -9,13 +9,7 @@ import {
 } from "@/components/ui/table";
 
 interface CampaignAttributionTableProps {
-  data?: Array<{
-    campaign: string;
-    firstTouch: number;
-    lastTouch: number;
-    linear: number;
-    revenue: number;
-  }>;
+  data?: any[];
   isLoading?: boolean;
 }
 

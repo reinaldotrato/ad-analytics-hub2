@@ -9,14 +9,7 @@ import {
 } from "@/components/ui/table";
 
 interface AdsetPerformanceTableProps {
-  data?: Array<{
-    adset: string;
-    spend: number;
-    impressions: number;
-    clicks: number;
-    leads: number;
-    cpl: number;
-  }>;
+  data?: any[];
   isLoading?: boolean;
 }
 

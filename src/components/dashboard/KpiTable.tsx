@@ -9,14 +9,10 @@ import {
 } from "@/components/ui/table";
 
 interface KpiTableProps {
-  data?: Array<{
-    metric: string;
-    value: string | number;
-    change?: number;
-    target?: string | number;
-  }>;
+  data?: any[];
   isLoading?: boolean;
   title?: string;
+  channel?: string;
 }
 
 export function KpiTable({ data = [], isLoading, title = "Métricas Detalhadas" }: KpiTableProps) {

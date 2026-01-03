@@ -13,6 +13,7 @@ import {
 interface MonthlyChartsProps {
   data?: any[];
   isLoading?: boolean;
+  channel?: string;
 }
 
 export function MonthlyCharts({ data = [], isLoading }: MonthlyChartsProps) {
