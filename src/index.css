@@ -1,96 +1,149 @@
+@import url("https://fonts.cdnfonts.com/css/sf-pro-display");
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
+/* Design System - Google Material + Apple Fonts + Tryvia Brand
+   All colors MUST be HSL.
 */
 
 @layer base {
+  /* Light Mode */
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    --background: 0 0% 98%;
+    --foreground: 222 47% 11%;
 
     --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card-foreground: 222 47% 11%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover-foreground: 222 47% 11%;
 
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
+    /* Primary - Tryvia Purple */
+    --primary: 263 70% 50%;
+    --primary-foreground: 0 0% 100%;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    /* Secondary - Google gray surfaces */
+    --secondary: 220 14% 96%;
+    --secondary-foreground: 222 47% 11%;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    --muted: 220 14% 96%;
+    --muted-foreground: 220 9% 46%;
 
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    --accent: 220 14% 96%;
+    --accent-foreground: 222 47% 11%;
 
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    --border: 220 13% 91%;
+    --input: 220 13% 91%;
+    --ring: 263 70% 50%;
 
-    --radius: 0.5rem;
+    --radius: 0.75rem;
 
-    --sidebar-background: 0 0% 98%;
+    /* Tryvia Brand Colors */
+    --tryvia-purple: 263 70% 50%;
+    --tryvia-magenta: 330 81% 60%;
+    --tryvia-cyan: 189 94% 43%;
+    --tryvia-orange: 25 95% 53%;
 
-    --sidebar-foreground: 240 5.3% 26.1%;
-
-    --sidebar-primary: 240 5.9% 10%;
-
-    --sidebar-primary-foreground: 0 0% 98%;
-
-    --sidebar-accent: 240 4.8% 95.9%;
-
-    --sidebar-accent-foreground: 240 5.9% 10%;
-
+    /* Sidebar */
+    --sidebar-background: 0 0% 100%;
+    --sidebar-foreground: 222 47% 11%;
+    --sidebar-primary: 263 70% 50%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 220 14% 96%;
+    --sidebar-accent-foreground: 222 47% 11%;
     --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 263 70% 50%;
+    --sidebar: 0 0% 100%;
 
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    /* Charts */
+    --chart-1: 263 70% 50%;
+    --chart-2: 189 94% 43%;
+    --chart-3: 330 81% 60%;
+    --chart-4: 25 95% 53%;
+    --chart-5: 142 71% 45%;
+
+    /* Fonts */
+    --font-sans: "SF Pro Display", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --font-serif: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
+    --font-mono: "SF Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+
+    /* Shadows - Material elevation */
+    --shadow-2xs: 0 1px 2px 0 hsl(0 0% 0% / 0.03);
+    --shadow-xs: 0 1px 3px 0 hsl(0 0% 0% / 0.04);
+    --shadow-sm: 0 1px 3px 0 hsl(0 0% 0% / 0.06), 0 1px 2px -1px hsl(0 0% 0% / 0.06);
+    --shadow: 0 2px 4px -1px hsl(0 0% 0% / 0.06), 0 4px 6px -1px hsl(0 0% 0% / 0.06);
+    --shadow-md: 0 4px 6px -1px hsl(0 0% 0% / 0.08), 0 2px 4px -2px hsl(0 0% 0% / 0.08);
+    --shadow-lg: 0 10px 15px -3px hsl(0 0% 0% / 0.08), 0 4px 6px -4px hsl(0 0% 0% / 0.08);
+    --shadow-xl: 0 20px 25px -5px hsl(0 0% 0% / 0.08), 0 8px 10px -6px hsl(0 0% 0% / 0.08);
+    --shadow-2xl: 0 25px 50px -12px hsl(0 0% 0% / 0.15);
+
+    --tracking-normal: 0em;
+    --spacing: 0.25rem;
   }
 
+  /* Dark Mode - Default */
   .dark {
-    --background: 222.2 84% 4.9%;
+    --background: 222 47% 6%;
     --foreground: 210 40% 98%;
 
-    --card: 222.2 84% 4.9%;
+    --card: 222 47% 9%;
     --card-foreground: 210 40% 98%;
 
-    --popover: 222.2 84% 4.9%;
+    --popover: 222 47% 9%;
     --popover-foreground: 210 40% 98%;
 
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
+    /* Primary - Tryvia Purple (brighter in dark) */
+    --primary: 263 70% 58%;
+    --primary-foreground: 0 0% 100%;
 
-    --secondary: 217.2 32.6% 17.5%;
+    /* Secondary */
+    --secondary: 217 33% 15%;
     --secondary-foreground: 210 40% 98%;
 
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
+    --muted: 217 33% 15%;
+    --muted-foreground: 215 20% 65%;
 
-    --accent: 217.2 32.6% 17.5%;
+    --accent: 217 33% 15%;
     --accent-foreground: 210 40% 98%;
 
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive: 0 62% 50%;
+    --destructive-foreground: 0 0% 100%;
 
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
+    --border: 217 33% 18%;
+    --input: 217 33% 18%;
+    --ring: 263 70% 58%;
+
+    /* Sidebar Dark */
+    --sidebar-background: 222 47% 8%;
+    --sidebar-foreground: 210 40% 98%;
+    --sidebar-primary: 263 70% 58%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --sidebar-accent: 217 33% 15%;
+    --sidebar-accent-foreground: 210 40% 98%;
+    --sidebar-border: 217 33% 18%;
+    --sidebar-ring: 263 70% 58%;
+    --sidebar: 222 47% 8%;
+
+    /* Charts Dark */
+    --chart-1: 263 70% 58%;
+    --chart-2: 189 94% 50%;
+    --chart-3: 330 81% 65%;
+    --chart-4: 25 95% 58%;
+    --chart-5: 142 71% 50%;
+
+    /* Shadows Dark - more subtle */
+    --shadow-2xs: 0 1px 2px 0 hsl(0 0% 0% / 0.15);
+    --shadow-xs: 0 1px 3px 0 hsl(0 0% 0% / 0.2);
+    --shadow-sm: 0 1px 3px 0 hsl(0 0% 0% / 0.25), 0 1px 2px -1px hsl(0 0% 0% / 0.25);
+    --shadow: 0 2px 4px -1px hsl(0 0% 0% / 0.3), 0 4px 6px -1px hsl(0 0% 0% / 0.3);
+    --shadow-md: 0 4px 6px -1px hsl(0 0% 0% / 0.35), 0 2px 4px -2px hsl(0 0% 0% / 0.35);
+    --shadow-lg: 0 10px 15px -3px hsl(0 0% 0% / 0.4), 0 4px 6px -4px hsl(0 0% 0% / 0.4);
+    --shadow-xl: 0 20px 25px -5px hsl(0 0% 0% / 0.4), 0 8px 10px -6px hsl(0 0% 0% / 0.4);
+    --shadow-2xl: 0 25px 50px -12px hsl(0 0% 0% / 0.5);
   }
 }
 
@@ -100,6 +153,165 @@ All colors MUST be HSL.
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground antialiased;
+    font-family: var(--font-sans);
+  }
+
+  /* Smooth theme transitions */
+  * {
+    @apply transition-colors duration-200;
+  }
+}
+
+/* Liquid Glass - Apple Style */
+@layer components {
+  /* Light Mode - Cards com relevo suave */
+  .liquid-glass {
+    background: linear-gradient(
+      180deg, 
+      hsl(0 0% 100%) 0%, 
+      hsl(220 14% 97%) 100%
+    );
+    border: 1px solid hsl(220 13% 88%);
+    box-shadow: 
+      0 1px 2px hsl(0 0% 0% / 0.04),
+      0 4px 12px hsl(0 0% 0% / 0.06),
+      0 8px 24px hsl(0 0% 0% / 0.04),
+      inset 0 1px 0 hsl(0 0% 100% / 0.8);
+  }
+
+  .liquid-glass:hover {
+    border-color: hsl(220 13% 82%);
+    box-shadow: 
+      0 2px 4px hsl(0 0% 0% / 0.06),
+      0 8px 20px hsl(0 0% 0% / 0.1),
+      0 12px 32px hsl(0 0% 0% / 0.06),
+      inset 0 1px 0 hsl(0 0% 100% / 0.8);
+  }
+
+  /* Dark Mode - Liquid Glass with backdrop blur */
+  .dark .liquid-glass {
+    background: linear-gradient(
+      180deg, 
+      hsl(217 33% 14%) 0%, 
+      hsl(222 47% 10%) 100%
+    );
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid hsl(217 33% 22%);
+    box-shadow: 
+      0 4px 16px hsl(0 0% 0% / 0.35),
+      0 8px 32px hsl(0 0% 0% / 0.25),
+      inset 0 1px 0 hsl(0 0% 100% / 0.05);
+  }
+
+  .dark .liquid-glass:hover {
+    border-color: hsl(217 33% 28%);
+    box-shadow: 
+      0 8px 24px hsl(0 0% 0% / 0.4),
+      0 16px 48px hsl(0 0% 0% / 0.3),
+      inset 0 1px 0 hsl(0 0% 100% / 0.08);
+  }
+
+  /* Cyan glow when dragging */
+  .liquid-glass-dragging {
+    box-shadow: 
+      0 0 20px hsl(189 94% 43% / 0.3),
+      0 0 40px hsl(189 94% 43% / 0.15),
+      0 8px 32px hsl(0 0% 0% / 0.2);
+    border-color: hsl(189 94% 43% / 0.4) !important;
+  }
+
+  .dark .liquid-glass-dragging {
+    box-shadow: 
+      0 0 20px hsl(189 94% 43% / 0.4),
+      0 0 40px hsl(189 94% 43% / 0.2),
+      0 8px 32px hsl(0 0% 0% / 0.4);
+    border-color: hsl(189 94% 43% / 0.5) !important;
+  }
+
+  /* Elevated stage header */
+  .stage-header-elevated {
+    position: relative;
+    z-index: 10;
+  }
+
+  .dark .stage-header-elevated {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    box-shadow: 
+      0 4px 12px rgba(0, 0, 0, 0.3),
+      0 2px 4px rgba(0, 0, 0, 0.2);
+  }
+
+  .stage-header-elevated::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    border-radius: 0 0 4px 4px;
+  }
+
+  /* Tryvia Toast with Gradient Border */
+  .tryvia-toast-gradient {
+    position: relative;
+    background: white !important;
+    border: none !important;
+    isolation: isolate;
+  }
+
+  .tryvia-toast-gradient::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    padding: 2.5px;
+    border-radius: 16px;
+    background: linear-gradient(
+      135deg,
+      hsl(25 95% 53%) 0%,      /* Orange */
+      hsl(330 81% 60%) 25%,    /* Magenta/Pink */
+      hsl(263 70% 50%) 50%,    /* Purple */
+      hsl(217 91% 60%) 75%,    /* Blue */
+      hsl(189 94% 43%) 100%    /* Cyan */
+    );
+    -webkit-mask: 
+      linear-gradient(#fff 0 0) content-box, 
+      linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+    z-index: -1;
+  }
+
+  .tryvia-toast-gradient::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 16px;
+    background: white;
+    z-index: -2;
+    box-shadow: 
+      0 10px 40px -10px hsl(263 70% 50% / 0.25),
+      0 20px 60px -20px hsl(330 81% 60% / 0.2);
+  }
+
+  /* Dark mode adjustments */
+  .dark .tryvia-toast-gradient {
+    background: hsl(222 47% 11%) !important;
+  }
+
+  .dark .tryvia-toast-gradient::after {
+    background: hsl(222 47% 11%);
+  }
+
+  .dark .tryvia-toast-gradient [data-title] {
+    color: hsl(210 40% 98%) !important;
+  }
+
+  .dark .tryvia-toast-gradient [data-description] {
+    color: hsl(215 20% 65%) !important;
   }
 }

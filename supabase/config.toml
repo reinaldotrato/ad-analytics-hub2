@@ -1,0 +1,37 @@
+project_id = "oorsclbnzfujgxzxfruj"
+
+[functions.chat-analyst]
+verify_jwt = true
+
+[functions.manage-user]
+verify_jwt = true
+
+[functions.create-client-with-user]
+verify_jwt = true
+
+[functions.recalculate-summary]
+verify_jwt = false
+
+[functions.sync-rdstation-to-crm]
+verify_jwt = false
+
+[functions.delete-client-complete]
+verify_jwt = true
+
+[functions.seed-demo-data]
+verify_jwt = true
+
+[functions.send-goal-notifications]
+verify_jwt = false
+
+[functions.daily-goal-summary]
+verify_jwt = false
+
+[functions.admin-global-metrics]
+verify_jwt = true
+
+[functions.send-support-whatsapp]
+verify_jwt = true
+
+[functions.send-invite-email]
+verify_jwt = false
