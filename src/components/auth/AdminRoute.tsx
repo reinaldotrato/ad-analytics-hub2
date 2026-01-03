@@ -8,7 +8,7 @@ interface AdminRouteProps {
 }
 
 export function AdminRoute({ children }: AdminRouteProps) {
-  const { user, profile, loading } = useAuth();
+  const { user, role, loading } = useAuth();
 
   if (loading) {
     return <PageLoader />;
@@ -18,8 +18,10 @@ export function AdminRoute({ children }: AdminRouteProps) {
     return <Navigate to="/login" replace />;
   }
 
-  if (profile?.role !== "admin" && profile?.role !== "superadmin") {
-    return <Navigate to="/dashboard" replace />;
+  // Admin, analyst and manager can access admin routes
+  const allowedRoles = ['admin', 'analyst', 'manager', 'crm_admin'];
+  if (!role || !allowedRoles.includes(role)) {
+    return <Navigate to="/client-dashboard" replace />;
   }
 
   return <>{children}</>;

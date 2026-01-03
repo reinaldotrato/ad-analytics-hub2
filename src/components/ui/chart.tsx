@@ -131,6 +131,9 @@ export function ChartTooltipContent({
   )
 }
 
+// Re-export Recharts Tooltip as ChartTooltip for convenience
+export { Tooltip as ChartTooltip } from 'recharts'
+
 export function ChartLegend({ children }: { children?: React.ReactNode }) {
   return <div className="flex items-center justify-center gap-4">{children}</div>
 }

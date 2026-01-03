@@ -1,7 +1,13 @@
 import { Skeleton } from "@/components/ui/skeleton";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 
-export function DashboardSkeleton() {
+type Channel = 'all' | 'google_ads' | 'meta_ads' | 'crm';
+
+interface DashboardSkeletonProps {
+  channel?: Channel;
+}
+
+export function DashboardSkeleton({ channel = 'all' }: DashboardSkeletonProps) {
   return (
     <div className="space-y-6">
       {/* KPI Cards Skeleton */}

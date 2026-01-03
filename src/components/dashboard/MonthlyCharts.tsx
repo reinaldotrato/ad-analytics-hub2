@@ -11,12 +11,7 @@ import {
 } from "recharts";
 
 interface MonthlyChartsProps {
-  data?: Array<{
-    month: string;
-    spend?: number;
-    leads?: number;
-    conversions?: number;
-  }>;
+  data?: any[];
   isLoading?: boolean;
 }
 

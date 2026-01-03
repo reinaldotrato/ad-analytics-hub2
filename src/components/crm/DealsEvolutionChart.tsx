@@ -11,12 +11,7 @@ import {
 } from "recharts";
 
 interface DealsEvolutionChartProps {
-  data?: Array<{
-    period: string;
-    created?: number;
-    won?: number;
-    lost?: number;
-  }>;
+  data?: any[];
   isLoading?: boolean;
 }
 

@@ -1,171 +1,234 @@
-import { ReactNode, useState } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
-import { useAuth } from "@/contexts/AuthContext";
-import { Button } from "@/components/ui/button";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import {
-  LayoutDashboard,
-  Settings,
-  LogOut,
-  Menu,
+import { useState, useEffect } from 'react';
+import { Outlet, Link, useLocation, useNavigate } from 'react-router-dom';
+import { useAuth, canAccessDashboards, canAccessCrm, canAccessGlobalView, canAccessSupport, canAccessAppSettings, canAccessCrmSettings, canAccessCrmAdvanced } from '@/contexts/AuthContext';
+import { Button } from '@/components/ui/button';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import { Separator } from '@/components/ui/separator';
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
+import { 
+  LayoutDashboard, 
+  Users, 
+  Settings, 
+  LogOut, 
+  Menu, 
   X,
-  Users,
-  Target,
-  FileText,
-  HelpCircle,
+  PieChart,
+  Globe,
+  HeadphonesIcon,
   Activity,
-} from "lucide-react";
-import { cn } from "@/lib/utils";
+  Building2,
+  CalendarDays,
+  Target,
+  BarChart3,
+  Contact,
+  Kanban,
+  ChevronDown,
+  ChevronRight,
+  TrendingUp
+} from 'lucide-react';
+import { cn } from '@/lib/utils';
 
-interface AppLayoutProps {
-  children: ReactNode;
+export interface AppLayoutProps {
+  children?: React.ReactNode;
 }
 
 export function AppLayout({ children }: AppLayoutProps) {
-  const { user, profile, signOut } = useAuth();
+  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [crmExpanded, setCrmExpanded] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
-  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const { user, role, signOut } = useAuth();
 
-  const isAdmin = profile?.role === "admin" || profile?.role === "superadmin";
-
-  const navigation = [
-    { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
-    ...(isAdmin
-      ? [{ name: "Admin", href: "/admin", icon: Users }]
-      : []),
-    { name: "CRM", href: "/crm", icon: Target },
-    { name: "Relatórios", href: "/reports", icon: FileText },
-    { name: "Monitor", href: "/monitor", icon: Activity },
-    { name: "Suporte", href: "/support", icon: HelpCircle },
-    { name: "Configurações", href: "/settings", icon: Settings },
-  ];
+  // Expand CRM menu if on CRM route
+  useEffect(() => {
+    if (location.pathname.startsWith('/crm')) {
+      setCrmExpanded(true);
+    }
+  }, [location.pathname]);
 
   const handleSignOut = async () => {
     await signOut();
-    navigate("/login");
+    navigate('/login');
   };
 
-  return (
-    <div className="min-h-screen bg-background">
-      {/* Mobile sidebar backdrop */}
-      {sidebarOpen && (
-        <div
-          className="fixed inset-0 z-40 bg-black/50 lg:hidden"
-          onClick={() => setSidebarOpen(false)}
-        />
-      )}
+  const userInitials = user?.email?.slice(0, 2).toUpperCase() || 'U';
 
+  const navItems = [
+    // Admin Global View
+    ...(canAccessGlobalView(role) ? [
+      { path: '/admin/global-dashboard', label: 'Visão Global', icon: Globe }
+    ] : []),
+    // Dashboard (for analysts and managers)
+    ...(canAccessDashboards(role) ? [
+      { path: '/dashboard', label: 'Dashboard', icon: LayoutDashboard }
+    ] : []),
+    // Client Dashboard (for everyone)
+    { path: '/client-dashboard', label: 'Meu Dashboard', icon: PieChart },
+  ];
+
+  const crmNavItems = canAccessCrm(role) ? [
+    { path: '/crm/pipeline', label: 'Pipeline', icon: Kanban },
+    { path: '/crm/dashboard', label: 'Dashboard CRM', icon: BarChart3 },
+    { path: '/crm/reports', label: 'Relatórios', icon: TrendingUp },
+    { path: '/crm/contacts', label: 'Contatos', icon: Contact },
+    { path: '/crm/companies', label: 'Empresas', icon: Building2 },
+    { path: '/crm/calendar', label: 'Calendário', icon: CalendarDays },
+    ...(canAccessCrmAdvanced(role) ? [
+      { path: '/crm/goals', label: 'Metas', icon: Target },
+      { path: '/crm/team-productivity', label: 'Produtividade', icon: Users },
+    ] : []),
+    ...(canAccessCrmSettings(role) ? [
+      { path: '/crm/settings', label: 'Configurações CRM', icon: Settings },
+    ] : []),
+  ] : [];
+
+  const bottomNavItems = [
+    ...(canAccessSupport(role) ? [
+      { path: '/support-tickets', label: 'Suporte', icon: HeadphonesIcon }
+    ] : []),
+    ...(canAccessGlobalView(role) ? [
+      { path: '/system-monitor', label: 'Monitor', icon: Activity }
+    ] : []),
+    ...(canAccessAppSettings(role) ? [
+      { path: '/settings', label: 'Configurações', icon: Settings }
+    ] : []),
+  ];
+
+  return (
+    <div className="flex h-screen bg-background">
       {/* Sidebar */}
       <aside
         className={cn(
-          "fixed inset-y-0 left-0 z-50 w-64 bg-card border-r transform transition-transform duration-200 ease-in-out lg:translate-x-0",
-          sidebarOpen ? "translate-x-0" : "-translate-x-full"
+          "fixed inset-y-0 left-0 z-50 flex flex-col border-r bg-card transition-all duration-300",
+          sidebarOpen ? "w-64" : "w-16"
         )}
       >
-        <div className="flex h-16 items-center justify-between px-4 border-b">
-          <Link to="/" className="flex items-center gap-2">
-            <img
-              src="/images/logo-positiva.png"
-              alt="Logo"
-              className="h-8 w-auto"
-            />
-          </Link>
+        {/* Logo */}
+        <div className="flex h-16 items-center justify-between border-b px-4">
+          {sidebarOpen && (
+            <Link to="/" className="flex items-center gap-2">
+              <img src="/images/logo-negativa.png" alt="Logo" className="h-8" />
+            </Link>
+          )}
           <Button
             variant="ghost"
             size="icon"
-            className="lg:hidden"
-            onClick={() => setSidebarOpen(false)}
+            onClick={() => setSidebarOpen(!sidebarOpen)}
           >
-            <X className="h-5 w-5" />
+            {sidebarOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
           </Button>
         </div>
 
-        <nav className="flex-1 space-y-1 p-4">
-          {navigation.map((item) => {
-            const isActive = location.pathname.startsWith(item.href);
-            return (
-              <Link
-                key={item.name}
-                to={item.href}
-                className={cn(
-                  "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors",
-                  isActive
-                    ? "bg-primary text-primary-foreground"
-                    : "text-muted-foreground hover:bg-accent hover:text-accent-foreground"
-                )}
-                onClick={() => setSidebarOpen(false)}
-              >
-                <item.icon className="h-5 w-5" />
-                {item.name}
+        {/* Navigation */}
+        <ScrollArea className="flex-1 px-3 py-4">
+          <nav className="space-y-2">
+            {navItems.map((item) => (
+              <Link key={item.path} to={item.path}>
+                <Button
+                  variant={location.pathname === item.path ? "secondary" : "ghost"}
+                  className={cn("w-full justify-start", !sidebarOpen && "justify-center px-2")}
+                >
+                  <item.icon className="h-4 w-4" />
+                  {sidebarOpen && <span className="ml-2">{item.label}</span>}
+                </Button>
               </Link>
-            );
-          })}
-        </nav>
-      </aside>
+            ))}
 
-      {/* Main content */}
-      <div className="lg:pl-64">
-        {/* Top bar */}
-        <header className="sticky top-0 z-40 flex h-16 items-center gap-4 border-b bg-background px-4 lg:px-6">
-          <Button
-            variant="ghost"
-            size="icon"
-            className="lg:hidden"
-            onClick={() => setSidebarOpen(true)}
-          >
-            <Menu className="h-5 w-5" />
-          </Button>
+            {/* CRM Collapsible Section */}
+            {crmNavItems.length > 0 && (
+              <>
+                <Separator className="my-2" />
+                <Button
+                  variant="ghost"
+                  className={cn("w-full justify-start", !sidebarOpen && "justify-center px-2")}
+                  onClick={() => setCrmExpanded(!crmExpanded)}
+                >
+                  <Users className="h-4 w-4" />
+                  {sidebarOpen && (
+                    <>
+                      <span className="ml-2 flex-1 text-left">CRM</span>
+                      {crmExpanded ? (
+                        <ChevronDown className="h-4 w-4" />
+                      ) : (
+                        <ChevronRight className="h-4 w-4" />
+                      )}
+                    </>
+                  )}
+                </Button>
+                {(crmExpanded || !sidebarOpen) && (
+                  <div className={cn("space-y-1", sidebarOpen && "ml-4")}>
+                    {crmNavItems.map((item) => (
+                      <Link key={item.path} to={item.path}>
+                        <Button
+                          variant={location.pathname === item.path ? "secondary" : "ghost"}
+                          className={cn("w-full justify-start", !sidebarOpen && "justify-center px-2")}
+                          size="sm"
+                        >
+                          <item.icon className="h-4 w-4" />
+                          {sidebarOpen && <span className="ml-2">{item.label}</span>}
+                        </Button>
+                      </Link>
+                    ))}
+                  </div>
+                )}
+              </>
+            )}
 
-          <div className="flex-1" />
+            {bottomNavItems.length > 0 && (
+              <>
+                <Separator className="my-2" />
+                {bottomNavItems.map((item) => (
+                  <Link key={item.path} to={item.path}>
+                    <Button
+                      variant={location.pathname === item.path ? "secondary" : "ghost"}
+                      className={cn("w-full justify-start", !sidebarOpen && "justify-center px-2")}
+                    >
+                      <item.icon className="h-4 w-4" />
+                      {sidebarOpen && <span className="ml-2">{item.label}</span>}
+                    </Button>
+                  </Link>
+                ))}
+              </>
+            )}
+          </nav>
+        </ScrollArea>
 
+        {/* User Menu */}
+        <div className="border-t p-3">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="relative h-8 w-8 rounded-full">
+              <Button variant="ghost" className={cn("w-full justify-start", !sidebarOpen && "justify-center px-2")}>
                 <Avatar className="h-8 w-8">
-                  <AvatarImage src={profile?.avatar_url || undefined} />
-                  <AvatarFallback>
-                    {profile?.name?.charAt(0)?.toUpperCase() || "U"}
-                  </AvatarFallback>
+                  <AvatarFallback>{userInitials}</AvatarFallback>
                 </Avatar>
+                {sidebarOpen && (
+                  <div className="ml-2 flex-1 text-left">
+                    <p className="text-sm font-medium truncate">{user?.email}</p>
+                    <p className="text-xs text-muted-foreground capitalize">{role}</p>
+                  </div>
+                )}
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-56" align="end" forceMount>
-              <DropdownMenuLabel className="font-normal">
-                <div className="flex flex-col space-y-1">
-                  <p className="text-sm font-medium leading-none">
-                    {profile?.name || "Usuário"}
-                  </p>
-                  <p className="text-xs leading-none text-muted-foreground">
-                    {user?.email}
-                  </p>
-                </div>
-              </DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem onClick={() => navigate("/settings")}>
-                <Settings className="mr-2 h-4 w-4" />
-                Configurações
-              </DropdownMenuItem>
-              <DropdownMenuSeparator />
+            <DropdownMenuContent align="end" className="w-56">
               <DropdownMenuItem onClick={handleSignOut}>
                 <LogOut className="mr-2 h-4 w-4" />
                 Sair
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
-        </header>
+        </div>
+      </aside>
 
-        {/* Page content */}
-        <main className="flex-1 p-4 lg:p-6">{children}</main>
-      </div>
+      {/* Main Content */}
+      <main className={cn(
+        "flex-1 overflow-auto transition-all duration-300",
+        sidebarOpen ? "ml-64" : "ml-16"
+      )}>
+        <div className="container mx-auto p-6">
+          {children || <Outlet />}
+        </div>
+      </main>
     </div>
   );
 }

@@ -10,24 +10,26 @@ import {
   Legend,
 } from "recharts";
 
-interface ChannelData {
-  channel: string;
-  spend: number;
-  leads: number;
-  cpl: number;
-}
-
 interface ChannelBarChartProps {
-  data?: ChannelData[];
+  data?: any[];
+  googleData?: any[];
+  metaData?: any[];
   isLoading?: boolean;
   title?: string;
 }
 
 export function ChannelBarChart({
   data = [],
+  googleData,
+  metaData,
   isLoading,
   title = "Desempenho por Canal",
 }: ChannelBarChartProps) {
+  // Merge googleData and metaData if provided
+  const chartData = data.length > 0 ? data : [
+    ...(googleData || []).map((d: any) => ({ ...d, channel: 'Google Ads' })),
+    ...(metaData || []).map((d: any) => ({ ...d, channel: 'Meta Ads' })),
+  ];
   if (isLoading) {
     return (
       <Card>
@@ -48,7 +50,7 @@ export function ChannelBarChart({
       </CardHeader>
       <CardContent>
         <ResponsiveContainer width="100%" height={300}>
-          <BarChart data={data}>
+          <BarChart data={chartData}>
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="channel" />
             <YAxis yAxisId="left" orientation="left" stroke="hsl(var(--primary))" />

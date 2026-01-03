@@ -9,15 +9,7 @@ import {
 } from "@/components/ui/table";
 
 interface KeywordPerformanceTableProps {
-  data?: Array<{
-    keyword: string;
-    impressions: number;
-    clicks: number;
-    ctr: number;
-    cpc: number;
-    conversions: number;
-    cost: number;
-  }>;
+  data?: any[];
   isLoading?: boolean;
 }
 
@@ -66,17 +58,17 @@ export function KeywordPerformanceTable({ data = [], isLoading }: KeywordPerform
           <TableBody>
             {data.map((row, index) => (
               <TableRow key={index}>
-                <TableCell className="font-medium">{row.keyword}</TableCell>
+                <TableCell className="font-medium">{row.keyword || row.keyword_text || 'N/A'}</TableCell>
                 <TableCell className="text-right">
-                  {new Intl.NumberFormat("pt-BR").format(row.impressions)}
+                  {new Intl.NumberFormat("pt-BR").format(row.impressions || 0)}
                 </TableCell>
                 <TableCell className="text-right">
-                  {new Intl.NumberFormat("pt-BR").format(row.clicks)}
+                  {new Intl.NumberFormat("pt-BR").format(row.clicks || 0)}
                 </TableCell>
-                <TableCell className="text-right">{row.ctr.toFixed(2)}%</TableCell>
-                <TableCell className="text-right">{formatCurrency(row.cpc)}</TableCell>
-                <TableCell className="text-right">{row.conversions}</TableCell>
-                <TableCell className="text-right">{formatCurrency(row.cost)}</TableCell>
+                <TableCell className="text-right">{(row.ctr || 0).toFixed(2)}%</TableCell>
+                <TableCell className="text-right">{formatCurrency(row.cpc || 0)}</TableCell>
+                <TableCell className="text-right">{row.conversions || 0}</TableCell>
+                <TableCell className="text-right">{formatCurrency(row.cost || 0)}</TableCell>
               </TableRow>
             ))}
           </TableBody>
