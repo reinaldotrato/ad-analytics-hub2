@@ -9,18 +9,14 @@ import {
 } from "@/components/ui/table";
 
 interface CampaignCostTableProps {
-  data?: Array<{
-    campaign: string;
-    spend: number;
-    impressions: number;
-    clicks: number;
-    cpc: number;
-    ctr: number;
-  }>;
+  data?: any[];
+  googleData?: any[];
+  metaData?: any[];
   isLoading?: boolean;
 }
 
-export function CampaignCostTable({ data = [], isLoading }: CampaignCostTableProps) {
+export function CampaignCostTable({ data = [], googleData, metaData, isLoading }: CampaignCostTableProps) {
+  const displayData = data.length > 0 ? data : [...(googleData || []), ...(metaData || [])];
   const formatCurrency = (value: number) =>
     new Intl.NumberFormat("pt-BR", {
       style: "currency",

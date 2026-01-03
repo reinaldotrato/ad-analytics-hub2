@@ -65,8 +65,7 @@ export function LostDealsChart({ data, viewMode = 'bar' }: LostDealsChartProps) 
     );
   }
 
-  const renderCustomTooltip = (props: TooltipProps<number, string>) => {
-    const { active, payload } = props;
+  const renderCustomTooltip = ({ active, payload }: any) => {
     if (active && payload && payload.length) {
       const item = payload[0].payload;
       return (
@@ -111,7 +110,7 @@ export function LostDealsChart({ data, viewMode = 'bar' }: LostDealsChartProps) 
                 ))}
               </Pie>
               <Tooltip content={renderCustomTooltip} />
-              <ChartLegend content={<ChartLegendContent />} />
+              <ChartLegend><ChartLegendContent /></ChartLegend>
             </PieChart>
           </ChartContainer>
         ) : (

@@ -10,15 +10,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 
 interface TopAdsTableProps {
-  data?: Array<{
-    ad: string;
-    campaign: string;
-    spend: number;
-    impressions: number;
-    clicks: number;
-    leads: number;
-    cpl: number;
-  }>;
+  data?: any[];
   isLoading?: boolean;
 }
 
