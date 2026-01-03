@@ -2,14 +2,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { TrendingUp, TrendingDown, DollarSign, Users, Target, BarChart3 } from "lucide-react";
 
 interface ConsolidatedKpiCardsProps {
-  data?: {
-    totalSpend?: number;
-    totalLeads?: number;
-    totalConversions?: number;
-    totalRevenue?: number;
-    avgCpl?: number;
-    avgRoas?: number;
-  };
+  data?: any;
   isLoading?: boolean;
 }
 

@@ -2,15 +2,18 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { RefreshCw } from "lucide-react";
 
 interface RecompraCardProps {
-  data?: {
-    totalRecompras?: number;
-    taxaRecompra?: number;
-    valorMedioRecompra?: number;
-  };
+  data?: any;
+  totalClientes?: number;
+  receita?: number;
+  taxaRecompra?: number;
   isLoading?: boolean;
 }
 
-export function RecompraCard({ data, isLoading }: RecompraCardProps) {
+export function RecompraCard({ data, totalClientes, receita, taxaRecompra, isLoading }: RecompraCardProps) {
+  // Support both formats
+  const total = totalClientes ?? data?.totalRecompras ?? 0;
+  const taxa = taxaRecompra ?? data?.taxaRecompra ?? 0;
+  const valor = receita ?? data?.valorMedioRecompra ?? 0;
   const formatCurrency = (value?: number) => {
     if (value === undefined || value === null) return "R$ 0,00";
     return new Intl.NumberFormat("pt-BR", {
@@ -45,19 +48,19 @@ export function RecompraCard({ data, isLoading }: RecompraCardProps) {
       <CardContent>
         <div className="space-y-3">
           <div>
-            <div className="text-2xl font-bold">{data?.totalRecompras || 0}</div>
+            <div className="text-2xl font-bold">{total}</div>
             <p className="text-xs text-muted-foreground">Total de recompras</p>
           </div>
           <div className="grid grid-cols-2 gap-4">
             <div>
               <div className="text-lg font-semibold">
-                {(data?.taxaRecompra || 0).toFixed(1)}%
+                {taxa.toFixed(1)}%
               </div>
               <p className="text-xs text-muted-foreground">Taxa de recompra</p>
             </div>
             <div>
               <div className="text-lg font-semibold">
-                {formatCurrency(data?.valorMedioRecompra)}
+                {formatCurrency(valor)}
               </div>
               <p className="text-xs text-muted-foreground">Valor médio</p>
             </div>

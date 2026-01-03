@@ -10,11 +10,7 @@ import {
 } from "recharts";
 
 interface DealsByStageChartProps {
-  data?: Array<{
-    stage: string;
-    count: number;
-    value?: number;
-  }>;
+  data?: any[];
   isLoading?: boolean;
 }
 
@@ -41,7 +37,7 @@ export function DealsByStageChart({ data = [], isLoading }: DealsByStageChartPro
         <ResponsiveContainer width="100%" height={300}>
           <BarChart data={data}>
             <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="stage" />
+            <XAxis dataKey="stage" tick={false} />
             <YAxis />
             <Tooltip
               contentStyle={{

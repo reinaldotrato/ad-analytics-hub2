@@ -1,9 +1,9 @@
 import { Navigate } from "react-router-dom";
-import { useAuth } from "@/contexts/AuthContext";
+import { useAuth, isCrmOnlyRole, canAccessDashboards } from "@/contexts/AuthContext";
 import { PageLoader } from "@/components/layout/PageLoader";
 
 export function RoleBasedRedirect() {
-  const { user, profile, loading } = useAuth();
+  const { user, role, loading } = useAuth();
 
   if (loading) {
     return <PageLoader />;
@@ -13,9 +13,21 @@ export function RoleBasedRedirect() {
     return <Navigate to="/login" replace />;
   }
 
-  if (profile?.role === "admin" || profile?.role === "superadmin") {
-    return <Navigate to="/admin" replace />;
+  // Admin goes to global dashboard
+  if (role === 'admin') {
+    return <Navigate to="/admin/global-dashboard" replace />;
   }
 
-  return <Navigate to="/dashboard" replace />;
+  // CRM-only roles go to pipeline
+  if (isCrmOnlyRole(role)) {
+    return <Navigate to="/crm/pipeline" replace />;
+  }
+
+  // Analysts and managers go to dashboard
+  if (canAccessDashboards(role)) {
+    return <Navigate to="/dashboard" replace />;
+  }
+
+  // Default: client dashboard
+  return <Navigate to="/client-dashboard" replace />;
 }

@@ -42,3 +42,7 @@ export const metricDefinitions: Record<string, string> = {
   // Keywords
   'Índice Qualidade': 'Nota do Google (1-10) sobre relevância da palavra-chave',
 };
+
+export function getMetricDefinition(key: string): string {
+  return metricDefinitions[key] || '';
+}

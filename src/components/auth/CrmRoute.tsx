@@ -1,14 +1,15 @@
 import { ReactNode } from "react";
 import { Navigate } from "react-router-dom";
-import { useAuth } from "@/contexts/AuthContext";
+import { useAuth, canAccessCrm, canAccessCrmSettings } from "@/contexts/AuthContext";
 import { PageLoader } from "@/components/layout/PageLoader";
 
-interface CrmRouteProps {
+export interface CrmRouteProps {
   children: ReactNode;
+  requireSettings?: boolean;
 }
 
-export function CrmRoute({ children }: CrmRouteProps) {
-  const { user, loading } = useAuth();
+export function CrmRoute({ children, requireSettings = false }: CrmRouteProps) {
+  const { user, role, loading } = useAuth();
 
   if (loading) {
     return <PageLoader />;
@@ -16,6 +17,16 @@ export function CrmRoute({ children }: CrmRouteProps) {
 
   if (!user) {
     return <Navigate to="/login" replace />;
+  }
+
+  // Check if user can access CRM
+  if (!canAccessCrm(role)) {
+    return <Navigate to="/client-dashboard" replace />;
+  }
+
+  // If route requires settings access (like CRM settings or team productivity)
+  if (requireSettings && !canAccessCrmSettings(role)) {
+    return <Navigate to="/crm/pipeline" replace />;
   }
 
   return <>{children}</>;

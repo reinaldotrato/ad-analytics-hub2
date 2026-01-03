@@ -10,15 +10,13 @@ import {
 } from "recharts";
 
 interface SalesFunnelChartProps {
-  data?: Array<{
-    stage: string;
-    count: number;
-    value?: number;
-  }>;
+  data?: any;
   isLoading?: boolean;
 }
 
-export function SalesFunnelChart({ data = [], isLoading }: SalesFunnelChartProps) {
+export function SalesFunnelChart({ data, isLoading }: SalesFunnelChartProps) {
+  // Normalize data to array format
+  const chartData = Array.isArray(data) ? data : (data?.stages || []);
   if (isLoading) {
     return (
       <Card>
@@ -39,7 +37,7 @@ export function SalesFunnelChart({ data = [], isLoading }: SalesFunnelChartProps
       </CardHeader>
       <CardContent>
         <ResponsiveContainer width="100%" height={300}>
-          <BarChart data={data} layout="vertical">
+          <BarChart data={chartData} layout="vertical">
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis type="number" />
             <YAxis dataKey="stage" type="category" width={100} />

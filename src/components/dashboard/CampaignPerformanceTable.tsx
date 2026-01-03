@@ -10,14 +10,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 
 interface CampaignPerformanceTableProps {
-  data?: Array<{
-    campaign: string;
-    status: string;
-    leads: number;
-    conversions: number;
-    revenue: number;
-    roas: number;
-  }>;
+  data?: any[];
   isLoading?: boolean;
 }
 
@@ -65,18 +58,18 @@ export function CampaignPerformanceTable({ data = [], isLoading }: CampaignPerfo
           <TableBody>
             {data.map((row, index) => (
               <TableRow key={index}>
-                <TableCell className="font-medium">{row.campaign}</TableCell>
+                <TableCell className="font-medium">{row.campaign || row.campaign_name || 'N/A'}</TableCell>
                 <TableCell>
                   <Badge
-                    variant={row.status === "active" ? "default" : "secondary"}
+                    variant={(row.status === "active" || row.status === "ENABLED") ? "default" : "secondary"}
                   >
-                    {row.status === "active" ? "Ativo" : "Pausado"}
+                    {(row.status === "active" || row.status === "ENABLED") ? "Ativo" : "Pausado"}
                   </Badge>
                 </TableCell>
-                <TableCell className="text-right">{row.leads}</TableCell>
-                <TableCell className="text-right">{row.conversions}</TableCell>
-                <TableCell className="text-right">{formatCurrency(row.revenue)}</TableCell>
-                <TableCell className="text-right">{row.roas.toFixed(2)}x</TableCell>
+                <TableCell className="text-right">{row.leads || row.conversions || 0}</TableCell>
+                <TableCell className="text-right">{row.conversions || 0}</TableCell>
+                <TableCell className="text-right">{formatCurrency(row.revenue || row.cost || 0)}</TableCell>
+                <TableCell className="text-right">{(row.roas || 0).toFixed(2)}x</TableCell>
               </TableRow>
             ))}
           </TableBody>

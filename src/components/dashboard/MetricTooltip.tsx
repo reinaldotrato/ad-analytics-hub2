@@ -6,14 +6,22 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { HelpCircle } from "lucide-react";
+import { getMetricDefinition } from "@/lib/metricDefinitions";
 
-interface MetricTooltipProps {
+export interface MetricTooltipProps {
   children?: ReactNode;
-  content: string;
+  content?: string;
   metricKey?: string;
+  metric?: string; // Alias for metricKey for backward compatibility
 }
 
-export function MetricTooltip({ children, content, metricKey }: MetricTooltipProps) {
+export function MetricTooltip({ children, content, metricKey, metric }: MetricTooltipProps) {
+  // Support both metricKey and metric props
+  const key = metricKey || metric;
+  const tooltipContent = content || (key ? getMetricDefinition(key) : "");
+
+  if (!tooltipContent) return null;
+
   return (
     <TooltipProvider>
       <Tooltip>
@@ -23,7 +31,7 @@ export function MetricTooltip({ children, content, metricKey }: MetricTooltipPro
           )}
         </TooltipTrigger>
         <TooltipContent>
-          <p className="max-w-xs">{content}</p>
+          <p className="max-w-xs">{tooltipContent}</p>
         </TooltipContent>
       </Tooltip>
     </TooltipProvider>

@@ -1,6 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { ChartContainer, ChartTooltip, ChartTooltipContent, ChartLegend, ChartLegendContent, type ChartConfig } from '@/components/ui/chart';
-import { PieChart, Pie, Cell, ResponsiveContainer, BarChart, Bar, XAxis, YAxis, CartesianGrid } from 'recharts';
+import { ChartContainer, ChartLegend, ChartLegendContent, type ChartConfig } from '@/components/ui/chart';
+import { PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, TooltipProps } from 'recharts';
 import { AlertTriangle } from 'lucide-react';
 
 interface LostDeal {
@@ -65,6 +65,21 @@ export function LostDealsChart({ data, viewMode = 'bar' }: LostDealsChartProps) 
     );
   }
 
+  const renderCustomTooltip = (props: TooltipProps<number, string>) => {
+    const { active, payload } = props;
+    if (active && payload && payload.length) {
+      const item = payload[0].payload;
+      return (
+        <div className="bg-background border rounded-lg p-2 shadow-lg">
+          <p className="font-medium">{item.reason}</p>
+          <p className="text-sm text-muted-foreground">{item.count} negócios ({item.percentage}%)</p>
+          <p className="text-sm text-muted-foreground">{formatCurrency(item.value)}</p>
+        </div>
+      );
+    }
+    return null;
+  };
+
   return (
     <Card>
       <CardHeader className="pb-2">
@@ -95,21 +110,7 @@ export function LostDealsChart({ data, viewMode = 'bar' }: LostDealsChartProps) 
                   <Cell key={`cell-${index}`} fill={entry.fill} />
                 ))}
               </Pie>
-              <ChartTooltip 
-                content={({ active, payload }) => {
-                  if (active && payload && payload.length) {
-                    const data = payload[0].payload;
-                    return (
-                      <div className="bg-background border rounded-lg p-2 shadow-lg">
-                        <p className="font-medium">{data.reason}</p>
-                        <p className="text-sm text-muted-foreground">{data.count} negócios ({data.percentage}%)</p>
-                        <p className="text-sm text-muted-foreground">{formatCurrency(data.value)}</p>
-                      </div>
-                    );
-                  }
-                  return null;
-                }}
-              />
+              <Tooltip content={renderCustomTooltip} />
               <ChartLegend content={<ChartLegendContent />} />
             </PieChart>
           </ChartContainer>
@@ -126,21 +127,7 @@ export function LostDealsChart({ data, viewMode = 'bar' }: LostDealsChartProps) 
                 tickLine={false}
                 axisLine={false}
               />
-              <ChartTooltip 
-                content={({ active, payload }) => {
-                  if (active && payload && payload.length) {
-                    const data = payload[0].payload;
-                    return (
-                      <div className="bg-background border rounded-lg p-2 shadow-lg">
-                        <p className="font-medium">{data.reason}</p>
-                        <p className="text-sm text-muted-foreground">{data.count} negócios ({data.percentage}%)</p>
-                        <p className="text-sm text-muted-foreground">{formatCurrency(data.value)}</p>
-                      </div>
-                    );
-                  }
-                  return null;
-                }}
-              />
+              <Tooltip content={renderCustomTooltip} />
               <Bar dataKey="count" radius={[0, 4, 4, 0]}>
                 {chartData.map((entry, index) => (
                   <Cell key={`cell-${index}`} fill={entry.fill} />

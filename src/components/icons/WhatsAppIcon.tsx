@@ -1,7 +1,14 @@
-export function WhatsAppIcon({ className }: { className?: string }) {
+interface WhatsAppIconProps {
+  className?: string;
+  size?: number;
+}
+
+export function WhatsAppIcon({ className, size = 24 }: WhatsAppIconProps) {
   return (
     <svg
       className={className}
+      width={size}
+      height={size}
       viewBox="0 0 24 24"
       fill="currentColor"
       xmlns="http://www.w3.org/2000/svg"

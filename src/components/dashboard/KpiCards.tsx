@@ -18,11 +18,17 @@ interface KpiData {
 
 interface KpiCardsProps {
   data?: KpiData;
-  isLoading?: boolean;
+  currentMonth?: KpiData;
+  previousMonth?: KpiData;
   previousData?: KpiData;
+  isLoading?: boolean;
+  channel?: string;
 }
 
-export function KpiCards({ data, isLoading, previousData }: KpiCardsProps) {
+export function KpiCards({ data, currentMonth, previousMonth, previousData, isLoading, channel }: KpiCardsProps) {
+  // Support both data prop and currentMonth/previousMonth props
+  const kpiData = data || currentMonth;
+  const prevData = previousData || previousMonth;
   const formatCurrency = (value?: number) => {
     if (value === undefined || value === null) return "R$ 0,00";
     return new Intl.NumberFormat("pt-BR", {
@@ -49,30 +55,30 @@ export function KpiCards({ data, isLoading, previousData }: KpiCardsProps) {
   const kpis = [
     {
       title: "Investimento",
-      value: formatCurrency(data?.spend),
-      change: calculateChange(data?.spend, previousData?.spend),
+      value: formatCurrency(kpiData?.spend),
+      change: calculateChange(kpiData?.spend, prevData?.spend),
       icon: DollarSign,
       tooltip: "Total investido em mídia paga no período",
     },
     {
       title: "Leads",
-      value: formatNumber(data?.leads),
-      change: calculateChange(data?.leads, previousData?.leads),
+      value: formatNumber(kpiData?.leads),
+      change: calculateChange(kpiData?.leads, prevData?.leads),
       icon: Users,
       tooltip: "Quantidade de leads gerados",
     },
     {
       title: "CPL",
-      value: formatCurrency(data?.cpl),
-      change: calculateChange(data?.cpl, previousData?.cpl),
+      value: formatCurrency(kpiData?.cpl),
+      change: calculateChange(kpiData?.cpl, prevData?.cpl),
       icon: Target,
       tooltip: "Custo por Lead (Investimento / Leads)",
       inverseChange: true,
     },
     {
       title: "ROAS",
-      value: data?.roas ? `${data.roas.toFixed(2)}x` : "0x",
-      change: calculateChange(data?.roas, previousData?.roas),
+      value: kpiData?.roas ? `${kpiData.roas.toFixed(2)}x` : "0x",
+      change: calculateChange(kpiData?.roas, prevData?.roas),
       icon: BarChart3,
       tooltip: "Retorno sobre investimento em anúncios",
     },

@@ -1,46 +1,51 @@
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { ReactNode } from "react";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Badge } from "@/components/ui/badge";
 
-interface ChannelTabsProps {
-  children?: ReactNode;
-  activeChannel?: string;
-  onChannelChange?: (channel: string) => void;
-  channels?: Array<{ id: string; label: string }>;
+type Channel = 'all' | 'google_ads' | 'meta_ads' | 'crm';
+
+interface ChannelStatus {
+  google_ads?: boolean;
+  meta_ads?: boolean;
+  crm?: boolean;
 }
 
-const defaultChannels = [
-  { id: "all", label: "Todos" },
-  { id: "meta", label: "Meta Ads" },
-  { id: "google", label: "Google Ads" },
-  { id: "tiktok", label: "TikTok Ads" },
+interface ChannelTabsProps {
+  selectedChannel: Channel;
+  onChannelChange: (channel: Channel) => void;
+  channelStatus?: ChannelStatus;
+}
+
+const channelConfig = [
+  { id: 'all' as Channel, label: 'Total' },
+  { id: 'google_ads' as Channel, label: 'Google Ads' },
+  { id: 'meta_ads' as Channel, label: 'Meta Ads' },
+  { id: 'crm' as Channel, label: 'CRM' },
 ];
 
 export function ChannelTabs({
-  children,
-  activeChannel = "all",
+  selectedChannel,
   onChannelChange,
-  channels = defaultChannels,
+  channelStatus = {},
 }: ChannelTabsProps) {
   return (
-    <Tabs value={activeChannel} onValueChange={onChannelChange}>
-      <TabsList>
-        {channels.map((channel) => (
-          <TabsTrigger key={channel.id} value={channel.id}>
-            {channel.label}
-          </TabsTrigger>
-        ))}
+    <Tabs value={selectedChannel} onValueChange={(v) => onChannelChange(v as Channel)}>
+      <TabsList className="bg-muted/50">
+        {channelConfig.map((channel) => {
+          const isActive = channel.id !== 'all' && channelStatus[channel.id as keyof ChannelStatus];
+          return (
+            <TabsTrigger
+              key={channel.id}
+              value={channel.id}
+              className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
+            >
+              {channel.label}
+              {channel.id !== 'all' && isActive && (
+                <Badge variant="secondary" className="ml-2 h-2 w-2 p-0 rounded-full bg-green-500" />
+              )}
+            </TabsTrigger>
+          );
+        })}
       </TabsList>
-      {children}
     </Tabs>
   );
-}
-
-export function ChannelTabContent({
-  value,
-  children,
-}: {
-  value: string;
-  children: ReactNode;
-}) {
-  return <TabsContent value={value}>{children}</TabsContent>;
 }

@@ -7,21 +7,14 @@ import {
   CartesianGrid,
   Tooltip,
   ResponsiveContainer,
-  Funnel,
-  FunnelChart,
-  LabelList,
 } from "recharts";
 
 interface FullFunnelChartProps {
-  data?: Array<{
-    stage: string;
-    value: number;
-    fill?: string;
-  }>;
+  data?: any;
   isLoading?: boolean;
 }
 
-export function FullFunnelChart({ data = [], isLoading }: FullFunnelChartProps) {
+export function FullFunnelChart({ data, isLoading }: FullFunnelChartProps) {
   if (isLoading) {
     return (
       <Card>
@@ -35,8 +28,11 @@ export function FullFunnelChart({ data = [], isLoading }: FullFunnelChartProps) 
     );
   }
 
-  const chartData = data.map((item, index) => ({
+  const rawData = Array.isArray(data) ? data : (data?.stages || []);
+  const chartData = rawData.map((item: any, index: number) => ({
     ...item,
+    stage: item.stage || item.name || `Etapa ${index + 1}`,
+    value: item.value || item.count || 0,
     fill: item.fill || `hsl(${220 + index * 20}, 70%, ${50 + index * 5}%)`,
   }));
 
