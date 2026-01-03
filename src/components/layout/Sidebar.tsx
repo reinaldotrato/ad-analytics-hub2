@@ -26,7 +26,6 @@ import {
   Users
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import logoTryvia from '@/assets/logo_tryvia.png';
 
 interface SidebarProps {
   collapsed: boolean;
@@ -65,7 +64,7 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
     {
       icon: Globe,
       label: 'Visão Global',
-      path: '/admin/global-dashboard',
+      path: '/admin-global',
       visible: hasFeature(FEATURES.GLOBAL_VIEW) || role === 'admin',
     },
   ].filter(item => item.visible);
@@ -91,7 +90,7 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
     {
       icon: Activity,
       label: 'Monitor',
-      path: '/monitor',
+      path: '/system-monitor',
       visible: role === 'admin',
     },
     {
@@ -151,15 +150,24 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
     <TooltipProvider delayDuration={0}>
       <aside
         className={cn(
-          "flex flex-col h-screen bg-sidebar border-r border-sidebar-border transition-all duration-300",
+          "flex flex-col h-screen bg-card border-r border-border transition-all duration-300",
           collapsed ? "w-16" : "w-64"
         )}
       >
         {/* Header */}
-        <div className="flex items-center justify-between h-16 px-4 border-b border-sidebar-border">
+        <div className="flex items-center justify-between h-16 px-4 border-b border-border">
           {!collapsed && (
             <Link to="/" className="flex items-center gap-2">
-              <img src={logoTryvia} alt="Tryvia" className="h-8" />
+              <img 
+                src="/images/logo-positiva.png" 
+                alt="Tryvia" 
+                className="h-8 dark:hidden"
+              />
+              <img 
+                src="/images/logo-negativa.png" 
+                alt="Tryvia" 
+                className="h-8 hidden dark:block"
+              />
             </Link>
           )}
           <Button
@@ -183,7 +191,7 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
             {/* CRM Section */}
             {hasCrmAccess && (
               <>
-                <div className="my-3 border-t border-sidebar-border" />
+                <div className="my-3 border-t border-border" />
                 
                 {collapsed ? (
                   <Tooltip>
@@ -239,7 +247,7 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
         </ScrollArea>
 
         {/* Bottom Navigation */}
-        <div className="border-t border-sidebar-border px-2 py-4 space-y-1">
+        <div className="border-t border-border px-2 py-4 space-y-1">
           {bottomNavItems.map((item) => (
             <NavItem key={item.path} {...item} />
           ))}
